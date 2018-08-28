@@ -14,6 +14,7 @@ function makeMarkerIcon(markerColor) {
     return markerImage;
   }
 
+
 class Map extends Component {
   componentWillReceiveProps ({ isScriptLoaded, isScriptLoadSucceed }) {
     if (isScriptLoaded && !this.props.isScriptLoaded) { // load finished
@@ -45,16 +46,25 @@ class Map extends Component {
           bounds.extend(location.pos);
 
           location.marker.addListener('click', function() {
-            infowindow.setContent(this.title);
+            infowindow.setContent('<div>' + this.title + '<div id="pano"></div></div>');
             infowindow.open(map, this)
           })
+          const panorama = new window.google.maps.StreetViewPanorama(
+            document.getElementById('pano'), {
+              position: location.pos,
+              pov: {
+                heading: 34,
+                pitch: 10
+              }
+            });
+              map.setStreetView(panorama);
         })
           map.fitBounds(bounds);
+
         }
       }
       else this.props.onError()
     }
-
   render(){
      return(
          <div>
