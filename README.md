@@ -1,7 +1,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 ## Resource
+https://github.com/balloob/react-sidebar
+https://www.w3schools.com/howto/howto_js_sidenav.asp
 https://github.com/udacity/ud864
+https://tomchentw.github.io/react-google-maps/#installation
 https://www.npmjs.com/package/react-async-script-loader
 https://stackoverflow.com/questions/41709765/how-to-load-the-google-maps-api-script-in-my-react-app-only-when-it-is-require
 

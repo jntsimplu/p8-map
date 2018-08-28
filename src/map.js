@@ -46,7 +46,7 @@ class Map extends Component {
           bounds.extend(location.pos);
 
           location.marker.addListener('click', function() {
-            infowindow.setContent('<div>' + this.title + '<div id="pano"></div></div>');
+            infowindow.setContent('<div>' + this.title + '</div>' + '<img src="https://freeiconshop.com/wp-content/uploads/edd/like-flat.png" width="50px"/>');
             infowindow.open(map, this)
           })
           const panorama = new window.google.maps.StreetViewPanorama(
@@ -68,7 +68,10 @@ class Map extends Component {
   render(){
      return(
          <div>
-             <div ref="map" style={{height: "500px"}}></div>
+              <header>
+                <h2>Title</h2>
+              </header>
+             <div ref="map" id="map"></div>
          </div>
      )
  }

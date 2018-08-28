@@ -1,22 +1,25 @@
 body {
-  background-color: #222;
+  background-color: #ff0000;
 }
 
 .App {
   text-align: center;
 }
 
-.App-header {
+
+header {
+  margin-top: -20px;
   background-color: #222;
-  height: 50px;
+  height: 40px;
   color: white;
 }
-
-#hide-listings,
-#show-listings {
-  width: 48%;
+#map {
+  bottom:0px;
+  height: 90%;
+  left: 0px;
+  position: absolute;
+  right: 0px;
 }
-
 .App-title {
   font-size: 1.5em;
 }
