@@ -1,8 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 ## Resource
-https://github.com/balloob/react-sidebar
-https://www.w3schools.com/howto/howto_js_sidenav.asp
+https://developer.foursquare.com/docs/api/venues/explore
 https://github.com/udacity/ud864
 https://tomchentw.github.io/react-google-maps/#installation
 https://www.npmjs.com/package/react-async-script-loader

@@ -63,7 +63,6 @@ class Map extends Component {
 
         }
       }
-      else this.props.onError()
     }
   render(){
      return(
