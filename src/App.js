@@ -1,106 +1,144 @@
 import React, { Component } from 'react';
-import { locations } from './locations.js';
-import scriptLoader from 'react-async-script-loader'
-import { styles } from './mapStyle.js';
+import scriptLoader from 'react-async-script-loader';
+import escapeRegExp from 'escape-string-regexp';
+import sortBy from 'sort-by';
 import './App.css';
-import axios from 'axios'
+import { locations } from './locations.js';
+import { styles } from './mapStyle';
 
-class App extends Component {
+let newMarkers = [];
+let infoWindow = [];
+class App extends Component{
   state = {
     venues: [],
+    loadSuccess: true,
+    map: {},
+    locations: locations,
     placeData: []
-  }
+  };
 
-  componentDidMount() {
-    this.getVenues()
-  }
-  renderMap = () => {
-    loadScript("https://maps.googleapis.com/maps/api/js?&key=AIzaSyCkeub2_Omf-LYhgiZ2Qa3KIIqVv78jc_M&callback=initMap")
-    window.initMap = this.initMap
-  }
-
-  getVenues = () => {
-    const endPoint = "https://api.foursquare.com/v2/venues/explore?"
-    const parameters = {
-      client_id: "WYIER5VJ5T2DHNU1HPHDAHOH0FJPTD1NKMMTUSITAHNWLD5U",
-      client_secret: "2ESQLERQQSVUTVAKIWXM3PFL05RIFZMHH1F5ACIHPQI54QLS",
-      query: "drinks",
-      near: "Alba Iulia",
-      v: "20182507"
+  updateData = (newData) => {
+    this.setState({ placeData: newData});
+  };
+  componentWillReceiveProps({isScriptLoadSucceed}){
+    // Error handler for script
+    if (isScriptLoadSucceed) {
+      // Create map
+      const map = new window.google.maps.Map(document.getElementById('map'),
+      {
+        zoom: 17,
+        center: {lat: 46.069923, lng: 23.561510},
+        styles: styles
+      });
+      this.setState({map:map});
     }
-    axios.get(endPoint + new URLSearchParams(parameters))
-    .then(response => {
-      this.setState({
-        venues: response.data.response.groups[0].items
-      }, this.renderMap())
+    else {
+      // Error message
+      console.log("Google map failed to load!");
+      this.setState({loadSuccess: false})
+    }
+  };
+
+  componentDidUpdate(){
+    const {locations, map, placeData} = this.state;
+    let showingLocations = locations
+
+    newMarkers.forEach( (marker) => { marker.setMap(null) });
+
+    newMarkers = [];
+    infoWindow = [];
+    showingLocations.map((marker)=> {
+
+
+      let placeInfo = placeData.filter(info => info !== [] && info.venueId === marker.venueID).map(item => {
+        if(placeData.length === 0) {
+          return `No information found about this place!`
+        } else if(content !== 0) {
+          const message =
+          `<div>${item.state}</div>
+          <div>${item.address}</div>`;
+
+          return message;
+        } else {
+          return `No information found about this place!`
+        }
+      })
+
+
+      let content =
+      `<div tabIndex="0" class="infowindow">
+      <h4>${marker.title}</h4>
+      <p>${placeInfo}</p>
+      </div>`
+
+      let addInfoWindow= new window.google.maps.InfoWindow({
+        content: content,
+      });
+      //Extend the map bound
+      let bounds = new window.google.maps.LatLngBounds();
+      //Create the marker
+      let addmarker = new window.google.maps.Marker({
+        map: map,
+        position: marker,
+        title : marker.title
+      });
+      //Add the marker to the list of marker
+      newMarkers.push(addmarker);
+      infoWindow.push(addInfoWindow);
+      addmarker.addListener('click', function() {
+        //Close windows before open the another
+        infoWindow.forEach(info => { info.close() });
+        addInfoWindow.open(map, addmarker);
+      })
+      //Bounds
+      newMarkers.forEach((m)=>
+      bounds.extend(m.position))
+      map.fitBounds(bounds)
+    })
+  }
+
+
+  componentDidMount(){
+    const clientID = `WYIER5VJ5T2DHNU1HPHDAHOH0FJPTD1NKMMTUSITAHNWLD5U`;
+    const clientSecret = `2ESQLERQQSVUTVAKIWXM3PFL05RIFZMHH1F5ACIHPQI54QLS`;
+
+    const url = `https://api.foursquare.com/v2/venues/explore?ll=46.069923,23.561510&client_id=${clientID}&client_secret=${clientSecret}&v=20180819`
+
+    fetch(url)
+    .then(data => {
+      if(data.ok) {
+        return data.json();
+      } else {
+        alert('Failed to get data from Foursquare' + new Error(data.statusText))
+      }
+    })
+    .then(data => {
+      const newData = data.response.groups[0].items.map(item => {
+        return {
+          position: { lat: item.venue.location.lat, lng: item.venue.location.lng },
+          title: item.venue.name,
+          venueId: item.venue.id,
+          address: item.venue.location.formattedAddress[0],
+          state: item.venue.location.state,
+        }
+      })
+      return  this.updateData(newData);
     })
     .catch(error => {
       console.log("ERROR!! " + error)
     })
-
   }
 
-  initMap = () => {
-    const map = new window.google.maps.Map(this.refs.map, {
-      zoom: 17,
-      center: {lat: 46.069923, lng: 23.561510},
-      styles: styles
-    })
-
-    const defaultIcon = makeMarkerIcon('0091ff');
-    const highlightedIcon = makeMarkerIcon('FFFF24');
-    const infowindow = new window.google.maps.InfoWindow()
-    locations.forEach( (location) =>  {
-      location.marker = new window.google.maps.Marker({
-        position: location.pos,
-        map: map,
-        title: location.title,
-        icon: defaultIcon
-      });
-      location.marker.addListener('mouseover', function() {
-        this.setIcon(highlightedIcon);
-      });
-      location.marker.addListener('mouseout', function() {
-        this.setIcon(defaultIcon);
-      });
-      location.marker.addListener('click', function() {
-        location.marker.addListener('click', function() {
-          infowindow.setContent('<div>' + this.title + '</div>' + '<img src="https://freeiconshop.com/wp-content/uploads/edd/like-flat.png" width="50px"/>');
-          infowindow.open(map, this)
-        });
-      });
-
-    })
-  }
-
-  render() {
-    const { venues, map, infowindow, bounds } = this.state;
-    return (
+  render(){
+    const { venues } = this.state;
+    return(
       <div>
-      <div ref="map" id="map"></div>
+      <div id="map"></div>
       </div>
-    );
+    )
   }
 }
 
-function loadScript(url) {
-  var index  = window.document.getElementsByTagName("script")[0]
-  var script = window.document.createElement("script")
-  script.src = url
-  script.async = true
-  script.defer = true
-  index.parentNode.insertBefore(script, index)
-}
-
-function makeMarkerIcon(markerColor) {
-  var markerImage = new window.google.maps.MarkerImage(
-    'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
-    '|40|_|%E2%80%A2',
-    new window.google.maps.Size(21, 34),
-    new window.google.maps.Point(0, 0),
-    new window.google.maps.Point(10, 34),
-    new window.google.maps.Size(21,34));
-    return markerImage;
-  }
-
-  export default App;
+export default scriptLoader(
+  ["https://maps.googleapis.com/maps/api/js?&key=AIzaSyCkeub2_Omf-LYhgiZ2Qa3KIIqVv78jc_M&callback=initMap"]
+)(App)
