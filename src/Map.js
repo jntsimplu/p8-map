@@ -71,6 +71,7 @@ class Map extends Component{
         this.setState({map:map});
       }
       else {
+        alert('Failed to load map!')
         this.setState({loadSuccess: false})
       }
     };
@@ -181,6 +182,7 @@ render(){
                     onChange={ (event)=> this.updatequery(event.target.value) }
                     role="search"
                     aria-labelledby="Search For a Location"
+                    tabIndex="1"
                   />
                   <button className="btn btn-default"><i className="glyphicon glyphicon-search"></i></button>
                 </div>
@@ -188,30 +190,32 @@ render(){
             </form>
           </div>
         </nav>
-        <div className="container-fluid">
-          <div className="row">
-            <div id="map"></div>
+        <main role="main" className="container-fluid">
+          <section className="row">
+            <div id="map" role="application" tabIndex="-1" aria-label="Good Place in Alba Iulia"></div>
               <aside className="col-md-3 col-md-offset-9 collapsed in" id="navbarSupportedContent">
                 <div className="sidenav">
                   <div className="list-group" data-bind="foreach: locationList">
-                  {showingLocations.map((getLocation, index)=>
-                    <li
-                      className="list-group-item list-group-item-action"
-                      id={ getLocation.title }
-                      onKeyPress={ this.handleKeyPress.bind(this,getLocation) }
-                      onClick={ this.listItem.bind(this,getLocation) }
-                      key={ index }
-                      tabIndex={ index+2 }
-                      area-labelledby={`View details for ${ getLocation.title }`}
-                      >
-                      { getLocation.title }
-                    </li>
-                  )}
+                  <ul tabIndex="1" area-labelledby="Locations details">
+                    {showingLocations.map((getLocation, index)=>
+                      <li
+                        className="list-group-item list-group-item-action"
+                        id={ getLocation.title }
+                        onKeyPress={ this.handleKeyPress.bind(this,getLocation) }
+                        onClick={ this.listItem.bind(this,getLocation) }
+                        key={ index }
+                        tabIndex={ index+2 }
+                        area-labelledby={`View details for ${ getLocation.title }`}
+                        >
+                        { getLocation.title }
+                      </li>
+                    )}
+                  </ul>
                   </div>
                 </div>
               </aside>
-            </div>
-          </div>
+            </section>
+          </main>
         </div>
       )
   }
