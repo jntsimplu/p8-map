@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import scriptLoader from 'react-async-script-loader';
-import './App.css';
+import escapeRegExp from 'escape-string-regexp';
+import sortBy from 'sort-by';
 import { locations } from './locations.js';
 import { styles } from './mapStyle';
 
@@ -23,7 +24,12 @@ class Map extends Component{
     loadSuccess: true,
     map: {},
     locations: locations,
-    placeData: []
+    placeData: [],
+    query: ''
+  };
+
+  updatequery =(query) => {
+    this.setState({query: query})
   };
 
   componentDidMount(){
@@ -71,8 +77,16 @@ class Map extends Component{
   };
 
   componentDidUpdate(){
-    const {locations, map, placeData} = this.state;
+    const {locations, map, placeData, query} = this.state;
     let showingLocations = locations
+
+    if (query) {
+      const match = new RegExp(escapeRegExp(query),'i')
+      showingLocations = locations.filter((location)=> match.test(location.title))
+    }
+    else{
+      showingLocations = locations;
+    }
 
     newMarkers.forEach( (marker) => { marker.setMap(null) });
 
@@ -122,8 +136,30 @@ class Map extends Component{
   updateData = (newData) => {
     this.setState({ placeData: newData});
   };
-
+  //Trigger a specific marker when the list item is clicked
+  listItem = (item) => {
+    let selected = newMarkers.filter((currentOne)=> currentOne.title === item.title)
+    window.google.maps.event.trigger(selected[0], 'click');
+  }
+  // Accessibility support from https://stackoverflow.com/questions/34223558/enter-key-event-handler-on-react-bootstrap-input-component?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+  handleKeyPress(target,item,e) {
+    if(item.charCode===13){
+      this.listItem(target,e)
+    }
+  }
 render(){
+  const { locations, query } = this.state;
+  let showingLocations;
+
+  if (query){
+    const match = new RegExp(escapeRegExp(query),'i')
+    showingLocations = locations.filter((location)=> match.test(location.title))
+  }
+  else{
+    showingLocations=locations;
+  }
+
+  showingLocations.sort(sortBy('title'))
   return(
       <div>
         <nav className="navbar navbar-inverse">
@@ -136,6 +172,16 @@ render(){
               <form className="navbar-form navbar-right" role="search">
                 <div className="input-group">
                   <div className="input-group-btn">
+                  <input
+                    id="search-input"
+                    type='text'
+                    className="form-control"
+                    placeholder='Search'
+                    value={ query }
+                    onChange={ (event)=> this.updatequery(event.target.value) }
+                    role="search"
+                    aria-labelledby="Search For a Location"
+                  />
                   <button className="btn btn-default"><i className="glyphicon glyphicon-search"></i></button>
                 </div>
               </div>
@@ -148,6 +194,19 @@ render(){
               <aside className="col-md-3 col-md-offset-9 collapsed in" id="navbarSupportedContent">
                 <div className="sidenav">
                   <div className="list-group" data-bind="foreach: locationList">
+                  {showingLocations.map((getLocation, index)=>
+                    <li
+                      className="list-group-item list-group-item-action"
+                      id={ getLocation.title }
+                      onKeyPress={ this.handleKeyPress.bind(this,getLocation) }
+                      onClick={ this.listItem.bind(this,getLocation) }
+                      key={ index }
+                      tabIndex={ index+2 }
+                      area-labelledby={`View details for ${ getLocation.title }`}
+                      >
+                      { getLocation.title }
+                    </li>
+                  )}
                   </div>
                 </div>
               </aside>

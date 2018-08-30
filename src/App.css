@@ -1,34 +1,59 @@
 body {
-  background-color: #ff0000;
+    font-family: "Lato", sans-serif;
 }
 
-.App {
-  text-align: center;
+.navbar {
+    border-radius: 0px;
+    margin-bottom: 0;
+    background-color: #63223c;
 }
 
-
-header {
-  margin-top: -20px;
-  background-color: #222;
-  height: 40px;
-  color: white;
+.nav-title {
+    font-size: 25px;
+    text-transform: uppercase;
+    color: white;
 }
+
 #map {
-  bottom:0px;
-  height: 90%;
-  left: 0px;
-  position: absolute;
-  right: 0px;
-}
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
+    margin: 0;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    z-index: -4;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.sidenav {
+    margin: 0;
+    position: absolute;
+    width: 195px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+.list-group-item {
+    margin: 0;
+    color: black;
+    background-color: #e5a267;
+    border: 1px solid #ecd292;
+}
+
+.list-group-item:focus {
+    color: #fff;
+    background-color: #63223c;
+    border-color: #a5494d;
+}
+
+.list-group-item:hover {
+    color: #000;
+    background-color: #ecd292;
+    cursor: pointer;
+}
+
+.container {
+    width: 100%;
+    padding-top: 8px;
+    padding-left: 8px;
 }
