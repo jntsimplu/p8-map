@@ -7,15 +7,9 @@ export const locations = [
   },
   {
     venueID: "4f4bb0f8e4b07165fc94a100",
-    title: "J'adore Caffe",
+    title: "Pizza Party",
     lat: 46.069307,
     lng: 23.560952
-  },
-  {
-    venueID: "50faccc8e4b0c3b20b6adcdf",
-    title: "Gavroche",
-    lat: 46.069616,
-    lng: 23.564387
   },
   {
     venueID: "519b88e2498e2e525c3b3828",
@@ -28,12 +22,6 @@ export const locations = [
     title: "3EST",
     lat: 46.069605,
     lng: 23.556503
-  },
-  {
-    venueID: "4d7d227d6152b60c0bb49e26",
-    title: "Glamour",
-    lat: 46.069859,
-    lng: 23.564517
   },
   {
     venueID: "534d2a30498e221f2d974476",

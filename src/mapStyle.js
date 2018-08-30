@@ -1,4 +1,4 @@
-const styles = [
+export const styles = [
   {
     featureType: 'water',
     stylers: [
@@ -62,5 +62,11 @@ const styles = [
       { color: '#efe9e4' },
       { lightness: -25 }
     ]
-  }
+  },{
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [
+              { visibility: "off" }
+        ]
+    }
 ];
