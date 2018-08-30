@@ -27,12 +27,17 @@ class Map extends Component{
     placeData: [],
     query: ''
   };
+  // this function will be called automatically in case of authentication error
+  gm_authFailure(){
+      window.alert("Google Maps error!")
+  }
 
   updatequery =(query) => {
     this.setState({query: query})
   };
 
   componentDidMount(){
+    window.gm_authFailure = this.gm_authFailure;
     fetch(`https://api.foursquare.com/v2/venues/explore?ll=46.069506,23.563806&client_id=WYIER5VJ5T2DHNU1HPHDAHOH0FJPTD1NKMMTUSITAHNWLD5U&client_secret=2ESQLERQQSVUTVAKIWXM3PFL05RIFZMHH1F5ACIHPQI54QLS&v=20180819`)
     .then(data => {
       if(data.ok) {
