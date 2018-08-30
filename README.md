@@ -30,7 +30,11 @@ FourSquare API
 
 ## Resource
 https://developer.foursquare.com/docs/api/venues/explore
+
 https://github.com/udacity/ud864
+
 https://tomchentw.github.io/react-google-maps/#installation
+
 https://www.npmjs.com/package/react-async-script-loader
+
 https://stackoverflow.com/questions/41709765/how-to-load-the-google-maps-api-script-in-my-react-app-only-when-it-is-require
