@@ -125,7 +125,35 @@ class Map extends Component{
 
 render(){
   return(
-        <div id="map"></div>
+      <div>
+        <nav className="navbar navbar-inverse">
+          <div className="container-fluid">
+            <div className="navbar-header">
+              <div className="navbar-brand">
+                <span className="nav-title">Neighborhood Map</span>
+              </div>
+            </div>
+              <form className="navbar-form navbar-right" role="search">
+                <div className="input-group">
+                  <div className="input-group-btn">
+                  <button className="btn btn-default"><i className="glyphicon glyphicon-search"></i></button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </nav>
+        <div className="container-fluid">
+          <div className="row">
+            <div id="map"></div>
+              <aside className="col-md-3 col-md-offset-9 collapsed in" id="navbarSupportedContent">
+                <div className="sidenav">
+                  <div className="list-group" data-bind="foreach: locationList">
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
       )
   }
 }
