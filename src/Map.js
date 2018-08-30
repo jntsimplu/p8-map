@@ -113,11 +113,18 @@ class Map extends Component{
       let bounds = new window.google.maps.LatLngBounds();
       //Create the marker
       const defaultIcon = makeMarkerIcon('e5a267');
+      const highlightedIcon = makeMarkerIcon('ecd292');
       let addmarker = new window.google.maps.Marker({
         map: map,
         position: marker,
         title : marker.title,
         icon: defaultIcon
+      });
+      addmarker.addListener('mouseover', function() {
+        this.setIcon(highlightedIcon);
+      });
+      addmarker.addListener('mouseout', function() {
+        this.setIcon(defaultIcon);
       });
       //Add the marker to the list of marker
       newMarkers.push(addmarker);
