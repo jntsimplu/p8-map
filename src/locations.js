@@ -13,7 +13,7 @@ export const locations = [
   },
   {
     venueID: "519b88e2498e2e525c3b3828",
-    title: "Rosenthalers",
+    title: "Rose Caffe",
     lat: 46.069187,
     lng: 23.564258
   },
@@ -37,7 +37,7 @@ export const locations = [
   },
   {
     venueID: "4e8173feb8f76bc19bbbdb89",
-    title: "Karissma",
+    title: "Karis",
     lat: 46.070521,
     lng: 23.556433
   },

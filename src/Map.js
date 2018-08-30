@@ -59,6 +59,7 @@ class Map extends Component{
       return  this.updateData(newData);
     })
     .catch(error => {
+      alert('"ERROR!! " + error')
       console.log("ERROR!! " + error)
     })
   }
@@ -126,6 +127,7 @@ class Map extends Component{
         title : marker.title,
         icon: defaultIcon
       });
+      //Change defaulticon when mouse over
       addmarker.addListener('mouseover', function() {
         this.setIcon(highlightedIcon);
       });
@@ -139,6 +141,12 @@ class Map extends Component{
         //Close windows before open the another
         infoWindow.forEach(info => { info.close() });
         addInfoWindow.open(map, addmarker);
+        //Add the aniamtion when the marker is clicked
+        addmarker.setAnimation(window.google.maps.Animation.BOUNCE);
+        setTimeout(() => {addmarker.setAnimation(null);}, 800)
+        //Change defaulticon when menu itme is clicked
+        this.setIcon(highlightedIcon);
+        setTimeout(() => {this.setIcon(defaultIcon);}, 800)
       })
       //Bounds
       newMarkers.forEach((m)=>
@@ -193,7 +201,7 @@ render(){
                     value={ query }
                     onChange={ (event)=> this.updatequery(event.target.value) }
                     role="search"
-                    aria-labelledby="Search For a Location"
+                    aria-label="search"
                     tabIndex="1"
                   />
                   <button className="btn btn-default"><i className="glyphicon glyphicon-search"></i></button>
@@ -217,7 +225,7 @@ render(){
                         onClick={ this.listItem.bind(this,getLocation) }
                         key={ index }
                         tabIndex={ index+2 }
-                        area-labelledby={`View details for ${ getLocation.title }`}
+                        role="list"
                         >
                         { getLocation.title }
                       </li>

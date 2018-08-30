@@ -63,9 +63,16 @@ body {
       margin-left: auto;
       margin-right: auto;
     }
+
     .sidenav {
-      display: none;
+      margin: 0;
+      position: absolute;
+      width: 110px;
+      top: 0px;
+      bottom: 0px;
+      right: 0px;
     }
+
     .input-group .form-control {
     position: relative;
     z-index: 2;
